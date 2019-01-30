@@ -1,0 +1,25 @@
+.App {
+  width: 500px;
+  height: 455px;
+  margin: auto;
+  background-color: #1e555c;
+  margin-top: 100px;
+  color: #ffffff;
+  .main-title {
+    display: flex;
+    width: 100%;
+    height: 10%;
+    font-size: 3rem;
+    font-weight: bold;
+    justify-content: center;
+    align-items: center;
+  }
+  .length-control {
+    width: 100%;
+    height: 10%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2rem;
+  }
+}
