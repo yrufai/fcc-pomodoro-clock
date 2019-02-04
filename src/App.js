@@ -7,7 +7,7 @@ class App extends Component {
       <div className="App">
         <div className="main-title"> Pomodoro Clock</div>
         <div className="length-control">
-          <div id="break-label">Break Lengtth </div>
+          <div id="break-label">Break Length </div>
           <div id="break-decrement"> </div>
           <div id="break-length">5</div>
           <div id="break-increment"> </div>
