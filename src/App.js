@@ -13,8 +13,7 @@ class App extends Component {
     this.sessionIncrement = this.sessionIncrement.bind(this);
     this.state = {
       breakCount: 0,
-      sessionCount: 0,
-      timer: new Date().toLocaleDateString()
+      sessionCount: 0
     };
   }
 
