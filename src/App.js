@@ -11,12 +11,10 @@ class App extends Component {
     this.breakIncrement = this.breakIncrement.bind(this);
     this.sessionDecrement = this.sessionDecrement.bind(this);
     this.sessionIncrement = this.sessionIncrement.bind(this);
-    this.countDown = this.countDown.bind(this);
     this.state = {
       breakCount: 1,
-      sessionCount: 2,
-      minutes: new Date().setMinutes(`${5}`),
-      seconds: 0
+      sessionCount: 25,
+      count: 25
     };
   }
 
@@ -48,22 +46,7 @@ class App extends Component {
       return state.sessionCount++;
     });
   }
-  countDown() {
-    const deadline = new Date(`${this.state.sessionCount}:00`).getTime();
-    const x = setInterval(() => {
-      const now = new Date().getTime();
-      const remainder = deadline - now;
-      const minutes = Math.floor((remainder % (1000 * 60 * 60)) / (1000 * 60));
-      const seconds = Math.floor((remainder % (1000 * 60)) / 1000);
-      this.setState({
-        minutes: minutes,
-        seconds: seconds
-      });
-      if (remainder < 0) {
-        clearInterval(x);
-      }
-    }, 1000);
-  }
+
   render() {
     return (
       <div className="App">
@@ -88,10 +71,7 @@ class App extends Component {
             <FontAwesomeIcon icon={faArrowUp} size="sm" />
           </div>
         </div>
-        <Timer
-          count={this.countDown}
-          timer={`${this.state.minutes}:${this.state.seconds}`}
-        />
+        <Timer count={this.state.sessionCount * 60} />
       </div>
     );
   }
