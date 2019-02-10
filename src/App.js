@@ -12,9 +12,8 @@ class App extends Component {
     this.sessionDecrement = this.sessionDecrement.bind(this);
     this.sessionIncrement = this.sessionIncrement.bind(this);
     this.state = {
-      breakCount: 1,
-      sessionCount: 25,
-      count: 25
+      breakCount: 2,
+      sessionCount: 1
     };
   }
 
@@ -71,7 +70,10 @@ class App extends Component {
             <FontAwesomeIcon icon={faArrowUp} size="sm" />
           </div>
         </div>
-        <Timer count={this.state.sessionCount * 60} />
+        <Timer
+          count={this.state.sessionCount * 60}
+          breakTime={this.state.breakCount * 60}
+        />
       </div>
     );
   }
