@@ -12,7 +12,7 @@ class App extends Component {
     this.sessionDecrement = this.sessionDecrement.bind(this);
     this.sessionIncrement = this.sessionIncrement.bind(this);
     this.state = {
-      breakCount: 2,
+      breakCount: 5,
       sessionCount: 1
     };
   }
@@ -71,9 +71,12 @@ class App extends Component {
           </div>
         </div>
         <Timer
-          count={this.state.sessionCount * 60}
-          breakTime={this.state.breakCount * 60}
+          sessionCount={this.state.sessionCount * 60}
+          breakCount={this.state.breakCount * 60}
         />
+        <div className="link">
+          by <a href="https://github.com/yrufai">YAKUBU AHMED EL-RUFAI</a>
+        </div>
       </div>
     );
   }

@@ -1,52 +1,75 @@
 import React from "react";
+import "./timer.scss";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPlayCircle, faPauseCircle } from "@fortawesome/free-solid-svg-icons";
 const moment = require("moment");
+
 class Timer extends React.Component {
   constructor(props) {
     super(props);
     this.countDown = this.countDown.bind(this);
     this.state = {
-      count: 0,
-      breakTime: 0
+      breakCount: this.props.breakCount,
+      sessionCount: this.props.sessionCount
     };
+    this.clear = -1;
+    this.clearBreak = -1;
   }
-  componentDidMount() {
-    const { count, breakTime } = this.props;
-    this.setState({
-      count: count,
-      breakTime: breakTime
-    });
-    this.countDown();
-  }
+
   countDown() {
-    this.clear = setInterval(() => {
-      this.setState(prevState => {
-        return {
-          count: prevState.count - 1
-        };
-      });
-      if (this.state.count <= 0) {
-        clearInterval(this.clear);
-        this.breakTime();
-      }
-    }, 1000);
+    clearInterval(this.clear);
+    if (this.clear === -1) {
+      this.clear = setInterval(() => {
+        this.setState(prevState => {
+          return {
+            sessionCount: prevState.sessionCount - 1
+          };
+        });
+        if (this.state.sessionCount <= 0) {
+          clearInterval(this.clear);
+          this.breakTime();
+        }
+      }, 1000);
+    } else {
+      clearInterval(this.clear);
+      this.clear = -1;
+    }
   }
   breakTime = () => {
-    this.clearBreak = setInterval(() => {
-      this.setState(prevState => {
-        return { breakTime: prevState.breakTime - 1 };
-      });
-    }, 1000);
+    clearInterval(this.clearBreak);
+    if (this.clearBreak === -1) {
+      this.clearBreak = setInterval(() => {
+        this.setState(prevState => {
+          return { breakCount: prevState.breakCount - 1 };
+        });
+        if (this.state.breakCount <= 0) {
+          clearInterval(this.clearBreak);
+        }
+      }, 1000);
+    } else {
+      clearInterval(this.clearBreak);
+      this.clearBreak = -1;
+    }
   };
-  componentWillUnmount() {
-    clearInterval(this.clear, this.clearBreak);
-  }
+
   render() {
     return (
-      <div>
-        <div>
-          {this.state.count <= 0
-            ? moment(this.state.breakTime * 1000).format("mm : ss")
-            : moment(this.state.count * 1000).format("mm: ss")}
+      <div className="timerBox">
+        <div className="timer">
+          <p>{this.props.sessionCount <= 0 ? "Break time" : "Session"}</p>
+          <div id="timer">
+            {this.props.sessionCount <= 0
+              ? moment(this.props.breakCount * 1000).format("mm : ss")
+              : moment(this.props.sessionCount * 1000).format("mm: ss")}
+          </div>
+        </div>
+        <div className="controls">
+          <FontAwesomeIcon
+            icon={faPlayCircle}
+            size="3x"
+            onClick={this.countDown}
+          />
+          <FontAwesomeIcon icon={faPauseCircle} size="3x" />
         </div>
       </div>
     );
