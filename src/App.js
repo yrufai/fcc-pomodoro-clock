@@ -101,7 +101,7 @@ class App extends Component {
     if (this.clearBreak === -1) {
       this.clearBreak = setInterval(() => {
         this.setState(prevState => {
-          return { breakCount: prevState.breakCount - 1 };
+          return { bcount: prevState.bcount - 1 };
         });
         if (this.state.breakCount <= 0) {
           clearInterval(this.clearBreak);
