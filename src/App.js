@@ -1,8 +1,17 @@
 import React, { Component } from "react";
-import Timer from "./timer";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowDown, faArrowUp } from "@fortawesome/free-solid-svg-icons";
+import {
+  faArrowDown,
+  faArrowUp,
+  faClock,
+  faPlayCircle,
+  faPauseCircle,
+  faSyncAlt
+} from "@fortawesome/free-solid-svg-icons";
 import "./App.scss";
+import "./timer.scss";
+
+const moment = require("moment");
 
 class App extends Component {
   constructor(props) {
@@ -11,10 +20,15 @@ class App extends Component {
     this.breakIncrement = this.breakIncrement.bind(this);
     this.sessionDecrement = this.sessionDecrement.bind(this);
     this.sessionIncrement = this.sessionIncrement.bind(this);
+    this.countDown = this.countDown.bind(this);
     this.state = {
       breakCount: 5,
-      sessionCount: 1
+      sessionCount: 25,
+      count: 1,
+      bcount: 1
     };
+    this.clear = -1;
+    this.clearBreak = -1;
   }
 
   breakDecrement() {
@@ -23,33 +37,89 @@ class App extends Component {
       if (count <= 0) {
         return (prevState.breakCount = 0);
       }
-      return count;
+      return count, (prevState.bcount = this.state.breakCount * 60);
     });
   }
   breakIncrement() {
     this.setState(prevState => {
-      return prevState.breakCount++;
+      return (
+        prevState.breakCount++, (prevState.bcount = this.state.breakCount * 60)
+      );
     });
   }
   sessionDecrement() {
-    this.setState(state => {
-      const count = state.sessionCount--;
+    this.setState(prevState => {
+      const count = prevState.sessionCount--;
       if (count <= 0) {
-        return (state.sessionCount = 0);
+        return (prevState.sessionCount = 0);
       }
-      return count;
+      return count, (prevState.count = this.state.sessionCount * 60);
     });
   }
   sessionIncrement() {
-    this.setState(state => {
-      return state.sessionCount++;
+    this.setState(prevState => {
+      return (
+        prevState.sessionCount++,
+        (prevState.count = this.state.sessionCount * 60)
+      );
     });
   }
+  componentDidMount() {
+    this.setState({
+      count: this.state.sessionCount * 60,
+      bcount: this.state.breakCount * 60
+    });
+  }
+  reset = () => {
+    clearInterval(this.clear, this.clearBreak);
+    this.setState({
+      count: this.state.sessionCount * 60,
+      bcount: this.state.breakCount * 60
+    });
+  };
+  countDown() {
+    clearInterval(this.clear);
+    if (this.clear === -1) {
+      this.clear = setInterval(() => {
+        this.setState(prevState => {
+          return {
+            count: prevState.count - 1
+          };
+        });
+        if (this.state.count <= 0) {
+          clearInterval(this.clear);
+          this.breakTime();
+        }
+      }, 1000);
+    } else {
+      clearInterval(this.clear);
+      this.clear = -1;
+    }
+  }
+  breakTime = () => {
+    clearInterval(this.clearBreak);
+    if (this.clearBreak === -1) {
+      this.clearBreak = setInterval(() => {
+        this.setState(prevState => {
+          return { breakCount: prevState.breakCount - 1 };
+        });
+        if (this.state.breakCount <= 0) {
+          clearInterval(this.clearBreak);
+        }
+      }, 1000);
+    } else {
+      clearInterval(this.clearBreak);
+      this.clearBreak = -1;
+    }
+  };
 
   render() {
     return (
       <div className="App">
-        <div className="main-title"> Pomodoro Clock</div>
+        <div className="main-title">
+          Pomodoro Cl
+          <FontAwesomeIcon icon={faClock} size="lg" /> ck
+        </div>
         <div className="length-control">
           <div id="break-label">Break Length </div>
           <div id="break-decrement" onClick={this.breakDecrement}>
@@ -70,12 +140,31 @@ class App extends Component {
             <FontAwesomeIcon icon={faArrowUp} size="sm" />
           </div>
         </div>
-        <Timer
-          sessionCount={this.state.sessionCount * 60}
-          breakCount={this.state.breakCount * 60}
-        />
+        <div className="timerBox">
+          <div className="timer">
+            <p>{this.state.count <= 0 ? "Break time" : "Session"}</p>
+            <div id="timer">
+              {this.state.count <= 0
+                ? moment(this.state.bcount * 1000).format("mm : ss")
+                : moment(this.state.count * 1000).format("mm: ss")}
+            </div>
+          </div>
+          <div className="controls">
+            <FontAwesomeIcon
+              icon={faPlayCircle}
+              size="3x"
+              onClick={this.countDown}
+            />
+            <FontAwesomeIcon
+              icon={faPauseCircle}
+              size="3x"
+              onClick={this.countDown}
+            />
+            <FontAwesomeIcon icon={faSyncAlt} size="3x" onClick={this.reset} />
+          </div>
+        </div>
         <div className="link">
-          by <a href="https://github.com/yrufai">YAKUBU AHMED EL-RUFAI</a>
+          by <a href="https://github.com/yrufai">Yakubu Ahmed El-Rufai</a>
         </div>
       </div>
     );

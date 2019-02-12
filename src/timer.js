@@ -15,7 +15,6 @@ class Timer extends React.Component {
     this.clear = -1;
     this.clearBreak = -1;
   }
-
   countDown() {
     clearInterval(this.clear);
     if (this.clear === -1) {
@@ -56,11 +55,11 @@ class Timer extends React.Component {
     return (
       <div className="timerBox">
         <div className="timer">
-          <p>{this.props.sessionCount <= 0 ? "Break time" : "Session"}</p>
+          <p>{this.state.sessionCount <= 0 ? "Break time" : "Session"}</p>
           <div id="timer">
-            {this.props.sessionCount <= 0
-              ? moment(this.props.breakCount * 1000).format("mm : ss")
-              : moment(this.props.sessionCount * 1000).format("mm: ss")}
+            {this.state.sessionCount <= 0
+              ? moment(this.state.breakCount * 1000).format("mm : ss")
+              : moment(this.state.sessionCount * 1000).format("mm: ss")}
           </div>
         </div>
         <div className="controls">
