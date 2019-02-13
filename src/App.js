@@ -10,6 +10,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import "./App.scss";
 import "./timer.scss";
+import Alarm from "./alarm/Loud_Alarm.mp3";
 
 const moment = require("moment");
 
@@ -89,6 +90,13 @@ class App extends Component {
         if (this.state.count <= 0) {
           clearInterval(this.clear);
           this.breakTime();
+        } else if (
+          (this.state.count < 5 * 60) &
+          (this.state.count > 4.7 * 60)
+        ) {
+          const audio = document.getElementById("alarm");
+          audio.currenTime = 0;
+          audio.play();
         }
       }, 1000);
     } else {
@@ -162,6 +170,9 @@ class App extends Component {
             />
             <FontAwesomeIcon icon={faSyncAlt} size="3x" onClick={this.reset} />
           </div>
+          <audio id="alarm">
+            <source src={Alarm} type="audio/mpeg" />
+          </audio>
         </div>
         <div className="link">
           by <a href="https://github.com/yrufai">Yakubu Ahmed El-Rufai</a>
