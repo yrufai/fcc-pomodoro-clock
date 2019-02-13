@@ -90,14 +90,19 @@ class App extends Component {
         if (this.state.count <= 0) {
           clearInterval(this.clear);
           this.breakTime();
-        } else if (
+          if (this.breakTime) {
+            const audio = document.getElementById("alarm");
+            audio.currenTime = 0;
+            audio.play();
+          }
+        } /*else if (
           (this.state.count < 5 * 60) &
           (this.state.count > 4.7 * 60)
         ) {
           const audio = document.getElementById("alarm");
           audio.currenTime = 0;
           audio.play();
-        }
+        }*/
       }, 1000);
     } else {
       clearInterval(this.clear);
